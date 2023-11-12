@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Transition } from '@headlessui/react';
 
 function App() {
+  // isDarkMode은 다크 모드의 활성화 여부, todos는 할 일 리스트, 
+  // todo는 새로 추가될 할 일, category는 선택된 카테고리, 
+  // categories는 카테고리 리스트, showCategoryInput은 카테고리 입력 폼의 보여짐 여부,
+  // removingTodos는 삭제 중인 할 일 리스트, removingCategories는 삭제 중인 카테고리 리스트를 관리합니다.
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [todos, setTodos] = useState(
     JSON.parse(localStorage.getItem('todos')) || []
@@ -15,6 +19,7 @@ function App() {
   const [removingTodos, setRemovingTodos] = useState([]);
   const [removingCategories, setRemovingCategories] = useState([]);
 
+   // 다크 모드 활성화 여부에 따라 다크 모드를 적용하거나 해제합니다.
   useEffect(() => {
     const classList = document.querySelector('html').classList;
     if (isDarkMode) {
@@ -28,40 +33,56 @@ function App() {
     if (category === '') setCategory('To-do');
   }, []); // 초기 "To-do" 카테고리 선택
 
+    // 할 일 리스트와 카테고리 리스트를 로컬 스토리지에 저장합니다.
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
     localStorage.setItem('categories', JSON.stringify(categories));
   }, [todos, categories]);
 
+    // 새로운 할 일을 추가하는 함수입니다.
   const addTodo = (e) => {
     e.preventDefault();
 
+// 할 일 내용이나 카테고리가 비어 있으면 추가하지 않습니다.
     if (todo === '' || category === '') return;
 
+    // 할 일 리스트에 새로운 할 일을 추가하고, 입력 폼을 비웁니다.
     setTodos([...todos, { text: todo, category }]);
     setTodo('');
   };
 
+  // 새로운 카테고리를 추가하는 함수입니다.
   const addCategory = (e) => {
     e.preventDefault();
 
+    // 카테고리가 비어 있거나 이미 존재하는 카테고리면 추가하지 않습니다.
     if (category !== '' && !categories.includes(category)) {
       setCategories([...categories, category]);
     }
+
+    // 카테고리 입력 폼을 비우고 숨깁니다.
     setCategory('');
     setShowCategoryInput(false);
   };
 
+  // 할 일을 삭제하는 함수입니다.
   const removeTodo = (selectedTodo) => {
+    // 삭제 중인 할 일 리스트에 선택된 할 일을 추가합니다.
     setRemovingTodos([...removingTodos, selectedTodo]);
+
+    // 애니메이션이 완료된 후에 할 일 리스트에서 선택된 할 일을 제거합니다.
     setTimeout(() => {
       setTodos(todos.filter((todo) => todo !== selectedTodo));
       setRemovingTodos(removingTodos.filter((todo) => todo !== selectedTodo));
     }, 200);
   };
 
+  // 카테고리를 삭제하는 함수입니다.
   const removeCategory = (selectedCategory) => {
+    // 삭제 중인 카테고리 리스트에 선택된 카테고리를 추가합니다.
     setRemovingCategories([...removingCategories, selectedCategory]);
+
+    // 애니메이션이 완료된 후에 카테고리 리스트에서 선택된 카테고리를 제거합니다.
     setTimeout(() => {
       setCategories(categories.filter((category) => category !== selectedCategory));
       setRemovingCategories(removingCategories.filter((category) => category !== selectedCategory));
