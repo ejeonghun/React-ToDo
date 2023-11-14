@@ -103,7 +103,6 @@ function App() {
         <label for="theme" class="theme">
 	  <span class="theme__toggle-wrap">
       <input id="theme" class="theme__toggle" type="checkbox" role="switch" name="theme" value="dark" onClick={() => setIsDarkMode(!isDarkMode)}/>
-      <span class="theme__fill"></span>
       <span class="theme__icon">
         <span class="theme__icon-part"></span>
         <span class="theme__icon-part"></span>
@@ -119,51 +118,57 @@ function App() {
   </label>
       </div>
       <form onSubmit={addTodo} className="w-full max-w-3xl">
-        <h2 className="text-2xl mb-4 text-center text-gray-900 dark:text-white">Todo List</h2>
-        <div className="flex flex-col md:flex-row gap-4 md:items-end mb-4">
-          <input
-            className="border-2 rounded px-3 py-2 w-full text-gray-900 dark:text-white transition-colors duration-500 focus:outline-none focus:ring focus:border-blue-500"
-            type="text"
-            placeholder="New Todo"
-            value={todo}
-            onChange={(e) => setTodo(e.target.value)}
-          />
-          <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
-            <h3>Categories: </h3>
-            {categories.map((_category, index) => (
-              <Transition
-              appear={true}
-              show={!removingCategories.includes(_category)}
-              enter="transform transition ease-in-out duration-700"
-              enterFrom="opacity-0 scale-50"
-              enterTo="opacity-100 scale-100"
-              leave="transform duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-              key={index}
+      <h2 className="text-2xl mb-4 text-center text-gray-900 dark:text-white">
+        Todo List
+      </h2>
+      <div className="flex flex-col md:flex-row gap-4 md:items-end mb-4">
+        <input
+          className="border-2 rounded px-3 py-2 w-full text-gray-900 dark:text-white transition-colors duration-500 focus:outline-none focus:ring focus:border-blue-500"
+          type="text"
+          placeholder="New Todo"
+          value={todo}
+          onChange={(e) => setTodo(e.target.value)}
+        />
+      </div>
+      <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
+        <h3>Categories: </h3>
+        {categories.map((_category, index) => (
+          <Transition
+            appear={true}
+            show={!removingCategories.includes(_category)}
+            enter="transform transition ease-in-out duration-700"
+            enterFrom="opacity-0 scale-50"
+            enterTo="opacity-100 scale-100"
+            leave="transform duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+            key={index}
+          >
+            <button
+              className={`px-3 py-2 rounded ${
+                category === _category
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'
+              } transition-colors duration-500 shadow-md mb-4`}
+              onClick={(e) => {
+                e.preventDefault();
+                setCategory(_category);
+              }}
             >
-                <button
-                  className={`px-3 py-2 rounded ${category === _category ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'} transition-colors duration-500 shadow-md`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setCategory(_category);
-                  }}
-                >
-                  {_category}
-                </button>
-                <button
-                    className="text-xl"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      removeCategory(_category);
-                    }}
-                  >
-                    &nbsp;x
-                  </button>
-              </Transition>
-            ))}
-          </div>
-        </div>
+              {_category}
+            </button>
+            <button
+              className="text-xl"
+              onClick={(e) => {
+                e.preventDefault();
+                removeCategory(_category);
+              }}
+            >
+              &nbsp;x
+            </button>
+          </Transition>
+        ))}
+      </div>
         <hr className="border-b-2 border-blue-500 mb-4 animate-pulse" />
         <div className="flex gap-4 mb-4">
           <button className="px-3 py-2 rounded bg-blue-500 text-white shadow-md" type="submit">
@@ -180,7 +185,7 @@ function App() {
         {showCategoryInput && (
           <div className="flex gap-4 mb-4">
             <input
-              className="border-2 rounded px-3 py-2 w-full text-gray-900 dark:text-white transition-colors duration-500 focus:outline-none focus:ring focus:border-blue-500"
+              className="border-2 rounded px-3 py-2 w-full text-gray-900 dark:text-black transition-colors duration-500 focus:outline-none focus:ring focus:border-blue-500"
               type="text"
               placeholder="New Category"
               value={category}
@@ -215,7 +220,7 @@ function App() {
               >
                 <div
                   key={index}
-                  className="p-2 rounded bg-gray-200 dark:bg-gray-700 transition-colors duration-500 border-2 border-blue-500 shadow-md"
+                  className="p-2 rounded bg-gray-300 dark:bg-gray-700 transition-colors duration-500 border-2 border-gray-500 shadow-md"
                 >
                   
                   {todo.text}
